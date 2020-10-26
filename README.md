@@ -23,5 +23,8 @@ The images in C1 and C2 folder must be matched by their filenames.
 
 ## Input example
 **C1**
-![B-2016 04 18-10-00-00-0010802 C1](https://user-images.githubusercontent.com/71325306/97153885-894ddc00-17b6-11eb-96b9-602d5e1a09e7.JPG)
+![C1](https://user-images.githubusercontent.com/71325306/97154516-4fc9a080-17b7-11eb-92d1-a02c49764e19.jpg)
 **C2**
+![C2](https://user-images.githubusercontent.com/71325306/97154540-5821db80-17b7-11eb-9b12-6b43057be9d5.jpg)
+## Output
+![C1C2](https://user-images.githubusercontent.com/71325306/97154577-65d76100-17b7-11eb-9ca5-39258ac40bd9.jpg)
