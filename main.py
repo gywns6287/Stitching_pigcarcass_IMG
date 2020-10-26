@@ -4,13 +4,19 @@ import argparse
 import cv2
 from data_load import *
 #python main.py --c1 C1 --c2 C2 --out joint2
+
+
+##parser
 parser = argparse.ArgumentParser()
 parser.add_argument("--c1")
 parser.add_argument("--c2")
 parser.add_argument("--out",default='joint')
 args = parser.parse_args()
 
+##data load
 img_list = [i.split('C1')[0].rstrip() for i in os.listdir(args.c1)]
+
+#make SIFT point discriptor
 sift = cv2.SIFT_create()
 FLANN_INDEX_KDTREE = 0
 index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
@@ -21,6 +27,7 @@ for img in tqdm.tqdm(img_list):
     c1 = cv2.imread('C1\\'+img+' C1.tif')
     c2 = cv2.imread('C2\\'+img+' C2.tif')
     
+    #remove bar by inpainting
     c1_bar = np.zeros(c1.shape[:2]).astype(np.uint8)
     c2_bar = np.zeros(c2.shape[:2]).astype(np.uint8)
 
@@ -29,13 +36,14 @@ for img in tqdm.tqdm(img_list):
 
     c1 = cv2.inpaint(c1,c1_bar,5,cv2.INPAINT_TELEA) 
     c2 = cv2.inpaint(c2,c2_bar,5,cv2.INPAINT_TELEA) 
-
+   
+    #find interesting points
     kp1, des1 = sift.detectAndCompute(c1,None)
     kp2, des2 = sift.detectAndCompute(c2,None)
 
     kp1_, des1_ = kp_filter(kp1,des1,c1.shape[1] - 30,'>=')
     kp2_, des2_ = kp_filter(kp2,des2,30,'<=')
-
+    
     matches = flann.knnMatch(des1_,des2_,k=2)
 
     good = []
