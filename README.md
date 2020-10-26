@@ -1,0 +1,1 @@
+Stitching_pigcarcass_Img
