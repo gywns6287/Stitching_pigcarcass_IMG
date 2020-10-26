@@ -8,8 +8,11 @@ Let's stitching pig carcass image printed from vcs2000.
 ### requirement
 
 python3
+
 opencv-python
+
 numpy
+
 ### Method summary
 1. Interesting points in C1, C2 images are found by SIFT algorithm.
 2. Only the points in the 30 pixcel on the right side of C1 image and the left side of C2 image are filtered out.
