@@ -44,6 +44,7 @@ for img in tqdm.tqdm(img_list):
     kp1_, des1_ = kp_filter(kp1,des1,c1.shape[1] - 30,'>=')
     kp2_, des2_ = kp_filter(kp2,des2,30,'<=')
     
+    #match points
     matches = flann.knnMatch(des1_,des2_,k=2)
 
     good = []
@@ -54,8 +55,10 @@ for img in tqdm.tqdm(img_list):
 
     c1_pts = np.float32([kp1_[m.queryIdx].pt for m in good])
     c2_pts = np.float32([kp2_[m.trainIdx].pt for m in good])
-
+    
+    #make transposition matrix T
     T = getTmatrix(c1_pts,c2_pts)
-
+    
+    #wrapping
     merge_img = Image_wrapping(c1,c2,T)
     cv2.imwrite('{0}\\{1}.tif'.format(args.out,img+'_C1C2'),merge_img)
