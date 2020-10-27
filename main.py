@@ -24,8 +24,8 @@ search_params = dict(checks = 50)
 flann = cv2.FlannBasedMatcher(index_params, search_params)
 
 for img in tqdm.tqdm(img_list):
-    c1 = cv2.imread('C1\\'+img+' C1.tif')
-    c2 = cv2.imread('C2\\'+img+' C2.tif')
+    c1 = cv2.imread(args.c1+'\\'+img+' C1.tif')
+    c2 = cv2.imread(args.c2+'\\'+img+' C2.tif')
     
     #remove bar by inpainting
     c1_bar = np.zeros(c1.shape[:2]).astype(np.uint8)
