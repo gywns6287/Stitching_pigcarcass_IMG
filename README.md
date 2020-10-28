@@ -22,8 +22,8 @@ numpy
 ```
 python main.py --c1 C1 --c2 C2 --out .
 ```
-The images in C1 and C2 folder must be matched by their file names.
-main.v2 is for reversed image. dataset only include non-reversed image.
+The images in C1 and C2 folder must be matched by their file names.\n
+main.v2 is for reversed image.
 
 ## Input example
 **C1**
