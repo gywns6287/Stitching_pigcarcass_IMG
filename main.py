@@ -58,7 +58,10 @@ for img in tqdm.tqdm(img_list):
     
     #make transposition matrix T
     T = getTmatrix(c1_pts,c2_pts)
-    
+    if len(T) == 0:
+        print("{0} dosen't have match points".format(img))
+        continue
+        
     #wrapping
     merge_img = Image_wrapping(c1,c2,T)
     cv2.imwrite('{0}\\{1}.tif'.format(args.out,img+'_C1C2'),merge_img)
