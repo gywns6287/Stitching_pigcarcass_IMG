@@ -80,3 +80,6 @@ for img in tqdm.tqdm(img_list):
     #wrapping
     merge_img = Image_wrapping(c1,c2,T)
     cv2.imwrite('{0}\\{1}.tif'.format(args.out,img+'_C1C2'),merge_img)
+    
+if len(error) > 0:
+    open('error_list.txt','w').write('\n'.join(error))
