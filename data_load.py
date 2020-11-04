@@ -25,50 +25,7 @@ def kp_filter(kp,des,thr,direct):
           
     return kp_,des_
 
-def getTmatrix2(target,point,thr=1):
 
-    t = target - point
-
-    max_inline = 0
-    best_diff = 999999
-    best_tar = []
-    for tx, ty in t:
-        if abs(ty) >= 20 or abs(tx) < 745:
-            continue 
-
-        inline = 0
-        inline_pt = []
-        inline_tar = []
-
-        for (x_, y_), (x, y) in zip(point,target):
-                                                          
-            if abs(x_+tx - x) <= thr and abs(y_+ty - y) <= thr:
-                                    
-                inline += 1
-                inline_pt.append([x_,y_])
-                inline_tar.append([x,y])
-
-        diff = np.mean(abs(target - (point + np.array([tx,ty]))))
-
-        if inline == max_inline:
-            if diff < best_diff:
-                best = (tx,ty)
-                best_pt = inline_pt
-                best_tar = inline_tar
-                max_inline = inline
-                best_diff = diff
-
-        elif inline > max_inline:
-            best = (tx,ty)
-            best_pt = inline_pt
-            best_tar = inline_tar
-            max_inline = inline
-            best_diff = diff
-   
-    print('{0} Points were included in inline set'.format(max_inline))  
-    if len(best_tar) == 0:
-        return []
-    return(np.mean(np.array(best_tar) - np.array(best_pt),axis=0).round().astype(np.int))
 
 def Image_wrapping(c1,c2,T):
 
@@ -119,7 +76,7 @@ def getTmatrix(target,point,thr=1):
                 inline_pt[0].append([x_,y_])
                 inline_tar[0].append([x,y])
                 
-            if abs(ty) >= 20:
+            if abs(ty) >= 5:
                 pass
                 
             elif abs(y_+ty - y) <= thr:
@@ -128,34 +85,31 @@ def getTmatrix(target,point,thr=1):
                 inline_pt[1].append([x_,y_])
                 inline_tar[1].append([x,y])
 
-        tx_diff = np.mean(abs(target - (point + np.array([tx,0])))[:,0])
-        ty_diff = np.mean(abs(target - (point + np.array([0,ty])))[:,1])
-
         if inline[0] == max_inline[0]:
-            if tx_diff < best_diff[0]:
+            if abs(tx) > best_diff[0]:
                 best_pt[0] = inline_pt[0]
                 best_tar[0] = inline_tar[0]
                 max_inline[0] = inline[0]
-                best_diff[0] = tx_diff
+                best_diff[0] = abs(tx)
 
         elif inline[0] > max_inline[0]:
             best_pt[0] = inline_pt[0]
             best_tar[0] = inline_tar[0]
             max_inline[0] = inline[0]
-            best_diff[0] = tx_diff
+            best_diff[0] = abs(tx)
 
         if inline[1] == max_inline[1]:
-            if ty_diff < best_diff[1]:
+            if abs(ty) < best_diff[1]:
                 best_pt[1] = inline_pt[1]
                 best_tar[1] = inline_tar[1]
                 max_inline[1] = inline[1]
-                best_diff[1] = ty_diff
+                best_diff[1] = abs(ty)
 
         elif inline[1] > max_inline[1]:
             best_pt[1] = inline_pt[1]
             best_tar[1] = inline_tar[1]
             max_inline[1] = inline[1]
-            best_diff[1] = ty_diff
+            best_diff[1] = abs(ty)
  
     print('{0},{1} Points were included in inline set'.format(max_inline[0],max_inline[1]))  
     if len(best_tar[0]) == 0 or len(best_tar[1]) == 0:
