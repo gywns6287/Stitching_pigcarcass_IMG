@@ -30,6 +30,8 @@ def getTmatrix(target,point,thr=1):
     t = target - point
     
     max_inline = 0
+    best_diff = 999999
+    best_tar = []
     for tx, ty in t:
         if abs(ty) >= 20:
             continue 
@@ -37,7 +39,7 @@ def getTmatrix(target,point,thr=1):
         inline = 0
         inline_pt = []
         inline_tar = []
-        
+
         for (x_, y_), (x, y) in zip(point,target):
                                                             
             if abs(x_+tx - x) <= thr and abs(y_+ty - y) <= thr:
@@ -45,18 +47,27 @@ def getTmatrix(target,point,thr=1):
                 inline += 1
                 inline_pt.append([x_,y_])
                 inline_tar.append([x,y])
-                                    
-        if inline >= max_inline:
+
+        diff = np.mean(abs(target - (point + np.array([tx,ty]))))
+
+        if inline == max_inline:
+            if diff < best_diff:
+                best = (tx,ty)
+                best_pt = inline_pt
+                best_tar = inline_tar
+                max_inline = inline
+                best_diff = diff
+
+        elif inline > max_inline:
             best = (tx,ty)
             best_pt = inline_pt
             best_tar = inline_tar
             max_inline = inline
+            best_diff = diff
     
-    if max_inline == 0:
-        print('Error: 0 points included in inline set')
+    print('{0} Points were included in inline set'.format(max_inline))  
+    if len(best_tar) == 0:
         return []
-
-    print('{0} Points were included in inline set'.format(max_inline))    
     return(np.mean(np.array(best_tar) - np.array(best_pt),axis=0).round().astype(np.int))
 
 def Image_wrapping(c1,c2,T):
