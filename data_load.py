@@ -67,7 +67,7 @@ def getTmatrix(target,point,thr=1):
          
         for (x_, y_), (x, y) in zip(point,target):
                 
-            if abs(tx) < 750:
+            if abs(tx) < 740:
                 pass        
             
             elif abs(x_+tx - x) <= thr:
