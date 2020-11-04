@@ -76,7 +76,7 @@ def getTmatrix(target,point,thr=1):
                 inline_pt[0].append([x_,y_])
                 inline_tar[0].append([x,y])
                 
-            if abs(ty) >= 5:
+            if abs(ty) >= 20:
                 pass
                 
             elif abs(y_+ty - y) <= thr:
