@@ -23,6 +23,7 @@ index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
 search_params = dict(checks = 50)
 flann = cv2.FlannBasedMatcher(index_params, search_params)
 
+error = []
 for img in tqdm.tqdm(img_list):
     c1 = cv2.imread(args.c1+'\\'+img+' C1.tif')
     c2 = cv2.imread(args.c2+'\\'+img+' C2.tif')
@@ -42,31 +43,45 @@ for img in tqdm.tqdm(img_list):
     kp2, des2 = sift.detectAndCompute(c2,None)
 
     #Leave only the side points of the photo
-    kp1_, des1_ = kp_filter(kp1,des1,30,'<=')
-    kp2_, des2_ = kp_filter(kp2,des2,c1.shape[1] - 30,'>=')
+    kp1_, des1_ = kp_filter(kp1,des1,20,'<=')
+    kp2_, des2_ = kp_filter(kp2,des2,c1.shape[1] - 20,'>=')
     
     #match points
     matches = flann.knnMatch(des2_,des1_,k=2)
-
-    good = []
-    for m,n in matches:
-        if m.distance < n.distance*0.8:
-            good.append(m)
     
-    print('{0} Points were mathced'.format(len(good)))  
-
-    c1_pts = np.float32([kp1_[m.trainIdx].pt for m in good])
-    c2_pts = np.float32([kp2_[m.queryIdx].pt for m in good])
+    thr = 0.6
+    while thr <= 1.1:
+        
+        if thr == 1.1:
+            good = [m for m,n in matches]
+        else:
+            good = []
+            for m,n in matches:
+                if m.distance < n.distance*thr:
+                    good.append(m)
+        #
+        print('{0} Points were mathced'.format(len(good)))  
+        #
+        c1_pts = np.float32([kp1_[m.trainIdx].pt for m in good])
+        c2_pts = np.float32([kp2_[m.queryIdx].pt for m in good])
+        #
+        T = getTmatrix(c2_pts,c1_pts)
+        if len(T) != 0:
+            break
+        else:
+            thr += 0.1
     
-    #make transposition matrix T
-    T = getTmatrix(c2_pts,c1_pts)
     if len(T) == 0:
-        print("{0} dosen't have match points".format(img))
+        print("{0} dosen't have enough points".format(img))
+        error.append(img)
         continue
-    
+
     #wrapping
     merge_img = Image_wrapping(c2,c1,T)
     rM = cv2.getRotationMatrix2D((merge_img.shape[1]/2, merge_img.shape[0]/2), 180, 1)
     
     rotation = cv2.warpAffine(merge_img, rM, (merge_img.shape[1],merge_img.shape[0]))
     cv2.imwrite('{0}\\{1}.tif'.format(args.out,img+'_C1C2'),rotation)
+
+if len(error) > 0:
+    open('error_list.txt','w').write('\n'.join(error))
