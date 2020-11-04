@@ -63,10 +63,10 @@ for img in tqdm.tqdm(img_list):
         #
         print('{0} Points were mathced'.format(len(good)))  
         #
-        c1_pts = np.float32([kp1_[m.trainIdx].pt for m in good])
-        c2_pts = np.float32([kp2_[m.queryIdx].pt for m in good])
+        c1_pts = np.float32([kp1_[m.queryIdx].pt for m in good])
+        c2_pts = np.float32([kp2_[m.trainIdx].pt for m in good])
         #
-        T = getTmatrix(c2_pts,c1_pts)
+        T = getTmatrix(c1_pts,c2_pts)
         if len(T) != 0:
             break
         else:
