@@ -43,8 +43,8 @@ for img in tqdm.tqdm(img_list):
     kp1, des1 = sift.detectAndCompute(c1,None)
     kp2, des2 = sift.detectAndCompute(c2,None)
 
-    kp1_, des1_ = kp_filter(kp1,des1,c1.shape[1] - 30,'>=')
-    kp2_, des2_ = kp_filter(kp2,des2,30,'<=')
+    kp1_, des1_ = kp_filter(kp1,des1,c1.shape[1] - 20,'>=')
+    kp2_, des2_ = kp_filter(kp2,des2,20,'<=')
     
     #match points
     matches = flann.knnMatch(des1_,des2_,k=2)
