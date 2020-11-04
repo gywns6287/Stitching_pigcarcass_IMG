@@ -3,6 +3,7 @@ import tqdm
 import argparse
 import cv2
 from data_load import *
+import numpy as np
 #python main.py --c1 C1 --c2 C2 --out joint2
 
 
